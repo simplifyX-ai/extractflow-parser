@@ -36,7 +36,7 @@ See [examples/ollama_setup.md](examples/ollama_setup.md) on how to setup Ollama 
 ### Basic Example Usage
 
 ```python
-from extractflow_parse import ExtractFlowParser
+from extractflow_parser import ExtractFlowParser
 
 # Initialize parser
 parser = ExtractFlowParser(
@@ -61,7 +61,7 @@ for i, page_content in enumerate(markdown_pages):
 ### PDF Page Configuration
 
 ```python
-from extractflow_parse import ExtractFlowParser, PDFPageConfig
+from extractflow_parser import ExtractFlowParser, PDFPageConfig
 
 # Configure PDF processing settings
 page_config = PDFPageConfig(
@@ -88,7 +88,7 @@ markdown_pages = parser.convert_pdf(pdf_path)
 ### OpenAI or Gemini Model Usage
 
 ```python
-from extractflow_parse import ExtractFlowParser
+from extractflow_parser import ExtractFlowParser
 
 # Initialize parser with OpenAI model
 parser = ExtractFlowParser(
