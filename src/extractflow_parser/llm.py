@@ -65,6 +65,9 @@ class LLM:
         self.temperature = temperature
         self.top_p = top_p
         self.complexity = complexity
+        
+        # Extract base_url from kwargs if present
+        self.base_url = kwargs.pop('base_url', None)
         self.kwargs = kwargs
 
         self.provider = self._get_provider_name(model_name)
@@ -93,7 +96,10 @@ class LLM:
                     "OpenAI is not installed. Please install it using pip install 'extractflow_parser[openai]'."
                 )
             try:
-                self.client = openai.OpenAI(api_key=api_key)
+                client_args = {'api_key': api_key}
+                if self.base_url:
+                    client_args['base_url'] = self.base_url
+                self.client = openai.OpenAI(**client_args)
             except openai.OpenAIError as e:
                 raise LLMError(f"Unable to initialize OpenAI client: {str(e)}")
 
