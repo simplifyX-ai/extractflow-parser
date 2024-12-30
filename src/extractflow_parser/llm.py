@@ -247,7 +247,6 @@ class LLM:
             request_params = {
                 "model": self.model_name,
                 "messages": messages,
-                **self.kwargs,
             }
 
             # Handle different request scenarios
@@ -263,21 +262,20 @@ class LLM:
                     )
                     response = self.client.chat.completions.create(**request_params)
                 else:
-                    # For OpenAI official endpoint, use parse with ImageDescription schema
-                    request_params.update(
-                        {
-                            "temperature": 0.0,
-                            "top_p": 0.4,
-                            "response_format": ImageDescription,
-                        }
-                    )
-                    response = self.client.beta.chat.completions.parse(**request_params)
+                    # For OpenAI official endpoint, use parse with minimal parameters
+                    parse_params = {
+                        "model": self.model_name,
+                        "messages": messages,
+                        "response_format": ImageDescription,
+                    }
+                    response = self.client.beta.chat.completions.parse(**parse_params)
             else:
                 # For non-structured responses
                 request_params.update(
                     {
                         "temperature": self.temperature,
                         "top_p": self.top_p,
+                        **self.kwargs,  # Include additional kwargs only for create()
                     }
                 )
                 response = self.client.chat.completions.create(**request_params)
