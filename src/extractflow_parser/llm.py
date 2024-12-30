@@ -242,9 +242,9 @@ class LLM:
             ]
 
             if structured:
-                response = self.client.beta.chat.completions.parse(
+                response = self.client.chat.completions.create(
                     model=self.model_name,
-                    response_format=ImageDescription,
+                    response_format={"type": "json_object"},
                     messages=messages,
                     temperature=0.0,
                     top_p=0.4,
