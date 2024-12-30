@@ -13,11 +13,11 @@ By participating in this project, you agree to abide by our Code of Conduct:
 ## Getting Started
 
 1. **Fork the Repository**
-   - Visit the [ExtractFlow Parse repository](https://github.com/simplifyX-ai/extractflow_parser)
+   - Visit the [ExtractFlow Parse repository](https://github.com/simplifyX-ai/extractflow-parser)
    - Click the "Fork" button in the top-right corner
    - Clone your forked repository:
    ```bash
-   git clone https://github.com/YOUR_USERNAME/extractflow_parser.git
+   git clone https://github.com/YOUR_USERNAME/extractflow-parser.git
    cd extractflow_parser
    ```
 
