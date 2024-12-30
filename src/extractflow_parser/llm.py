@@ -44,10 +44,10 @@ class LLM:
         from importlib.resources import files
 
         _image_analysis_prompt = (
-            files("extractflow_parse").joinpath("img_analysis.prompt").read_text()
+            files("extractflow_parser").joinpath("img_analysis.prompt").read_text()
         )
         _md_prompt_template = Template(
-            files("extractflow_parse").joinpath("md_prompt.j2").read_text()
+            files("extractflow_parser").joinpath("md_prompt.j2").read_text()
         )
     except Exception as e:
         raise FileNotFoundError(f"Failed to load prompt files: {str(e)}")
