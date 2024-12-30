@@ -2,6 +2,7 @@ from typing import Literal, Dict, Any, Union
 from pydantic import BaseModel
 from jinja2 import Template
 import re
+import instructor
 from tenacity import retry, stop_after_attempt, wait_exponential
 
 SUPPORTED_MODELS: Dict[str, str] = {
@@ -99,7 +100,7 @@ class LLM:
                 client_args = {"api_key": api_key}
                 if self.base_url:
                     client_args["base_url"] = self.base_url
-                self.client = openai.OpenAI(**client_args)
+                self.client = instructor.from_openai(openai.OpenAI(**client_args))
             except openai.OpenAIError as e:
                 raise LLMError(f"Unable to initialize OpenAI client: {str(e)}")
 
@@ -247,39 +248,15 @@ class LLM:
             request_params = {
                 "model": self.model_name,
                 "messages": messages,
+                "temperature": self.temperature,
+                "top_p": self.top_p,
             }
 
             # Handle different request scenarios
             if structured:
-                if self.model_name.startswith("accounts"):
-                    # For custom endpoints, use regular create with structured output
-                    request_params.update(
-                        {
-                            "temperature": 0.0,
-                            "top_p": 0.4,
-                            "response_format": {"type": "json_object"},
-                        }
-                    )
-                    response = self.client.chat.completions.create(**request_params)
-                else:
-                    # For OpenAI official endpoint, use parse with minimal parameters
-                    parse_params = {
-                        "model": self.model_name,
-                        "messages": messages,
-                        "response_format": ImageDescription,
-                    }
-                    response = self.client.beta.chat.completions.parse(**parse_params)
-            else:
-                # For non-structured responses
-                request_params.update(
-                    {
-                        "temperature": self.temperature,
-                        "top_p": self.top_p,
-                        **self.kwargs,  # Include additional kwargs only for create()
-                    }
-                )
-                response = self.client.chat.completions.create(**request_params)
+                request_params.update({"response_model": ImageDescription})
 
+            response = self.client.chat.completions.create(**request_params)
             content = response.choices[0].message.content
 
             # Only apply markdown cleanup for non-structured responses
