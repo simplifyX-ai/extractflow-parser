@@ -252,7 +252,7 @@ class LLM:
 
             # Handle different request scenarios
             if structured:
-                if self.base_url:
+                if self.model_name.startswith("accounts"):
                     # For custom endpoints, use regular create with structured output
                     request_params.update(
                         {
