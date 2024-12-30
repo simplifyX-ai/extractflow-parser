@@ -1,0 +1,70 @@
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[project]
+name = "extractflow_parser"
+dynamic = ["version"]
+description = "Parse PDF documents into markdown formatted content using Vision LLMs"
+readme = "README.md"
+requires-python = ">=3.9"
+license = "MIT"
+authors = [
+    { name = "Chi Tran", email = "chitran.whitecat@gmail.com" }
+]
+classifiers = [
+    "Development Status :: 1 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+dependencies = [
+    "jinja2>=3.0.0",
+    "ollama>=0.4.4",
+    "pydantic>=2.0.0",
+    "pymupdf>=1.22.0",
+    "tenacity>=9.0.0",
+    "tqdm>=4.65.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/simplifyX-ai/extractflow_parser"
+Repository = "https://github.com/simplifyX-ai/extractflow_parser.git"
+
+[project.optional-dependencies]
+dev = [
+    "black>=24.4.1",
+    "pytest>=8.3.4",
+    "ruff>=0.8.3",
+]
+openai = [
+    "openai==1.58.0",
+]
+gemini = [
+    "google-generativeai==0.8.3",
+]
+all = [
+    "google-generativeai==0.8.3",
+    "openai==1.58.0",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/extractflow_parse"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/src/extractflow_parse",
+    "/tests",
+]
+
+[tool.hatch.build.targets.wheel.force-include]
+"src/extractflow_parse/md_prompt.j2" = "extractflow_parse/md_prompt.j2"
+"src/extractflow_parse/img_analysis.prompt" = "extractflow_parse/img_analysis.prompt"
+
+[tool.hatch.version]
+source = "vcs"

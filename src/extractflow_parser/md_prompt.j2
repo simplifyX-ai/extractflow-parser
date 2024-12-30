@@ -1,0 +1,27 @@
+{% autoescape true %}
+
+Your task is to analyze the given image and extract textual content in markdown format.
+
+{% if confidence_score_text is defined and confidence_score_text is number %}
+    {% if confidence_score_text > 0.6 %}
+        - Verify if the extracted text matches with the content in the image: {{ extracted_text|escape|trim }}.
+        - Ensure markdown text formatting for {{ extracted_text|escape|trim }} is applied properly by analyzing the image.
+        - Strictly do not change any content in the original extracted text while applying markdown text formatting.
+    {% else %}
+        - Please carefully reanalyze the text in the image as the initial confidence score was low.
+        - Convert the provided image into markdown format and ensure that all content from the image is included.
+    {% endif %}
+{% endif %}
+
+{% if tables_detected is defined and tables_detected|string == "Yes" %}
+- Preserve the tabular structure in markdown format using | for columns and - for the header row separator.
+- Ensure that the cell values are properly aligned within the table columns and the tabular data is not distorted.
+- Maintain the original positioning of the table within the scanned document. Do not include any additional explanations or comments.
+{% endif %}
+
+- Preserve markdown text formatting if present such as bold, italics, underlines, headers, bullet points, links or other elements.
+- Strictly, do not omit any textual content from the given image and do not include any additional explanations, notes or comments.
+- Ensure that the content does not have unnecessary formatting and at the same time, preserve the original formatting as much as possible.
+- Strictly, do not generate code fences or backticks like ``` or ```markdown.
+
+{% endautoescape %}
