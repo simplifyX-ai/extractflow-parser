@@ -115,6 +115,10 @@ class LLM:
     @classmethod
     def _get_provider_name(cls, model_name: str) -> str:
         """Get the provider name for a given model name."""
+        # Check if model starts with "accounts"
+        if model_name.startswith("accounts"):
+            return "openai"
+        
         try:
             return SUPPORTED_MODELS[model_name]
         except KeyError:
@@ -122,6 +126,7 @@ class LLM:
                 f"'{model}' from {provider}"
                 for model, provider in SUPPORTED_MODELS.items()
             )
+            supported_models += "\nAny model starting with 'accounts' will use OpenAI provider"
             raise UnsupportedModelError(
                 f"Model '{model_name}' is not supported. "
                 f"Supported models are: {supported_models}"
