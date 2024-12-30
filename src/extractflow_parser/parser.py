@@ -39,13 +39,13 @@ class ExtractFlowParser:
         temperature: float = 0.2,
         top_p: float = 0.3,
         extraction_complexity: bool = False,
+        openai_compatible: bool = False,
         base_url: Optional[str] = None,  # Optional: Only used for OpenAI models
         **kwargs: Any,
     ):
         """Initialize parser with PDFPageConfig and LLM configuration."""
         self.page_config = page_config or PDFPageConfig()
 
-        # Initialize LLM with base_url only if it's an OpenAI model
         llm_kwargs = {
             "model_name": model_name,
             "temperature": temperature,
@@ -58,6 +58,9 @@ class ExtractFlowParser:
         # Add base_url only if it's an OpenAI model
         if base_url:
             llm_kwargs["base_url"] = base_url
+        
+        if openai_compatible:
+            llm_kwargs["openai_compatible"] = openai_compatible
 
         self.llm = LLM(**llm_kwargs)
 

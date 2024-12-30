@@ -40,10 +40,10 @@ from extractflow_parser import ExtractFlowParser
 
 # Initialize parser
 parser = ExtractFlowParser(
+    openai_compatible=True,
     base_url="https://api.fireworks.ai/inference/v1",
     api_key="your_api_key",
     model_name="accounts/fireworks/models/qwen2-vl-72b-instruct",
-    # model_name="llama3.2-vision:11b", # For local models, you don't need to provide the api key or base_url
     temperature=0.2,
     top_p=0.3,
     extraction_complexity=True # Set to True for more detailed extraction

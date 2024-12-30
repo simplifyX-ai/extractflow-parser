@@ -60,18 +60,23 @@ class LLM:
         top_p: float,
         api_key: Union[str, None],
         complexity: bool,
+        openai_compatible: bool = False,
         **kwargs: Any,
     ):
         self.model_name = model_name
         self.temperature = temperature
         self.top_p = top_p
         self.complexity = complexity
+        self.openai_compatible = openai_compatible
 
         # Extract base_url from kwargs if present
         self.base_url = kwargs.pop("base_url", None)
         self.kwargs = kwargs
 
-        self.provider = self._get_provider_name(model_name)
+        if openai_compatible:
+            self.provider = "openai"
+        else:
+            self.provider = self._get_provider_name(model_name)
 
         if self.provider == "ollama":
             import ollama
@@ -122,19 +127,12 @@ class LLM:
     @classmethod
     def _get_provider_name(cls, model_name: str) -> str:
         """Get the provider name for a given model name."""
-        # Check if model starts with "accounts"
-        if model_name.startswith("accounts"):
-            return "openai"
-
         try:
             return SUPPORTED_MODELS[model_name]
         except KeyError:
             supported_models = ", ".join(
                 f"'{model}' from {provider}"
                 for model, provider in SUPPORTED_MODELS.items()
-            )
-            supported_models += (
-                "\nAny model starting with 'accounts' will use OpenAI provider"
             )
             raise UnsupportedModelError(
                 f"Model '{model_name}' is not supported. "
