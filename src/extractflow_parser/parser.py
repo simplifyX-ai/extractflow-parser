@@ -58,7 +58,7 @@ class ExtractFlowParser:
         # Add base_url only if it's an OpenAI model
         if base_url:
             llm_kwargs["base_url"] = base_url
-        
+
         if openai_compatible:
             llm_kwargs["openai_compatible"] = openai_compatible
 
