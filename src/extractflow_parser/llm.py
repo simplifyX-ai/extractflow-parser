@@ -241,31 +241,52 @@ class LLM:
                 }
             ]
 
-            if structured:
-                response = self.client.chat.completions.create(
-                    model=self.model_name,
-                    response_format={"type": "json_object"},
-                    messages=messages,
-                    temperature=0.0,
-                    top_p=0.4,
-                    **self.kwargs,
-                )
-                return response.choices[0].message.content
-
-            response = self.client.chat.completions.create(
-                model=self.model_name,
-                messages=messages,
-                temperature=self.temperature,
-                top_p=self.top_p,
+            # Common parameters for all requests
+            request_params = {
+                "model": self.model_name,
+                "messages": messages,
                 **self.kwargs,
-            )
+            }
 
-            return re.sub(
-                r"```(?:markdown)?\n(.*?)\n```",
-                r"\1",
-                response.choices[0].message.content,
-                flags=re.DOTALL,
-            )
+            # Handle different request scenarios
+            if structured:
+                if self.base_url:
+                    # For custom endpoints, use regular create with structured output
+                    request_params.update({
+                        "temperature": 0.0,
+                        "top_p": 0.4,
+                        "response_format": {"type": "json_object"},
+                    })
+                    response = self.client.chat.completions.create(**request_params)
+                else:
+                    # For OpenAI official endpoint, use parse with ImageDescription schema
+                    request_params.update({
+                        "temperature": 0.0,
+                        "top_p": 0.4,
+                        "response_format": ImageDescription,
+                    })
+                    response = self.client.beta.chat.completions.parse(**request_params)
+            else:
+                # For non-structured responses
+                request_params.update({
+                    "temperature": self.temperature,
+                    "top_p": self.top_p,
+                })
+                response = self.client.chat.completions.create(**request_params)
+
+            content = response.choices[0].message.content
+            
+            # Only apply markdown cleanup for non-structured responses
+            if not structured:
+                content = re.sub(
+                    r"```(?:markdown)?\n(.*?)\n```",
+                    r"\1",
+                    content,
+                    flags=re.DOTALL,
+                )
+            
+            return content
+
         except Exception as e:
             raise LLMError(f"OpenAI Model processing failed: {str(e)}")
 
