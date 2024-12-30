@@ -110,18 +110,6 @@ parser = ExtractFlowParser(
 )
 ```
 
-## Supported Models
-
-This package supports the following Vision LLM models:
-
-- OpenAI: `gpt-4o`, `gpt-4o-mini`
-- Google Gemini: `gemini-1.5-flash`, `gemini-2.0-flash-exp`, `gemini-1.5-pro`
-- Meta Llama and LLava from Ollama: `llava:13b`, `llava:34b`, `llama3.2-vision:11b`, `llama3.2-vision:70b`
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 ## Models Support
 
 ExtractFlow supports various vision language models from different providers:
@@ -143,3 +131,7 @@ ExtractFlow supports various vision language models from different providers:
 - `gemini-1.5-pro`
 
 Note: Any model path that starts with `accounts` will automatically use the OpenAI provider. This is particularly useful for models from providers that use OpenAI-compatible APIs.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
