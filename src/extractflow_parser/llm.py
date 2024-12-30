@@ -65,9 +65,9 @@ class LLM:
         self.temperature = temperature
         self.top_p = top_p
         self.complexity = complexity
-        
+
         # Extract base_url from kwargs if present
-        self.base_url = kwargs.pop('base_url', None)
+        self.base_url = kwargs.pop("base_url", None)
         self.kwargs = kwargs
 
         self.provider = self._get_provider_name(model_name)
@@ -96,9 +96,9 @@ class LLM:
                     "OpenAI is not installed. Please install it using pip install 'extractflow_parser[openai]'."
                 )
             try:
-                client_args = {'api_key': api_key}
+                client_args = {"api_key": api_key}
                 if self.base_url:
-                    client_args['base_url'] = self.base_url
+                    client_args["base_url"] = self.base_url
                 self.client = openai.OpenAI(**client_args)
             except openai.OpenAIError as e:
                 raise LLMError(f"Unable to initialize OpenAI client: {str(e)}")
@@ -124,7 +124,7 @@ class LLM:
         # Check if model starts with "accounts"
         if model_name.startswith("accounts"):
             return "openai"
-        
+
         try:
             return SUPPORTED_MODELS[model_name]
         except KeyError:
@@ -132,7 +132,9 @@ class LLM:
                 f"'{model}' from {provider}"
                 for model, provider in SUPPORTED_MODELS.items()
             )
-            supported_models += "\nAny model starting with 'accounts' will use OpenAI provider"
+            supported_models += (
+                "\nAny model starting with 'accounts' will use OpenAI provider"
+            )
             raise UnsupportedModelError(
                 f"Model '{model_name}' is not supported. "
                 f"Supported models are: {supported_models}"
@@ -252,30 +254,36 @@ class LLM:
             if structured:
                 if self.base_url:
                     # For custom endpoints, use regular create with structured output
-                    request_params.update({
-                        "temperature": 0.0,
-                        "top_p": 0.4,
-                        "response_format": {"type": "json_object"},
-                    })
+                    request_params.update(
+                        {
+                            "temperature": 0.0,
+                            "top_p": 0.4,
+                            "response_format": {"type": "json_object"},
+                        }
+                    )
                     response = self.client.chat.completions.create(**request_params)
                 else:
                     # For OpenAI official endpoint, use parse with ImageDescription schema
-                    request_params.update({
-                        "temperature": 0.0,
-                        "top_p": 0.4,
-                        "response_format": ImageDescription,
-                    })
+                    request_params.update(
+                        {
+                            "temperature": 0.0,
+                            "top_p": 0.4,
+                            "response_format": ImageDescription,
+                        }
+                    )
                     response = self.client.beta.chat.completions.parse(**request_params)
             else:
                 # For non-structured responses
-                request_params.update({
-                    "temperature": self.temperature,
-                    "top_p": self.top_p,
-                })
+                request_params.update(
+                    {
+                        "temperature": self.temperature,
+                        "top_p": self.top_p,
+                    }
+                )
                 response = self.client.chat.completions.create(**request_params)
 
             content = response.choices[0].message.content
-            
+
             # Only apply markdown cleanup for non-structured responses
             if not structured:
                 content = re.sub(
@@ -284,7 +292,7 @@ class LLM:
                     content,
                     flags=re.DOTALL,
                 )
-            
+
             return content
 
         except Exception as e:
