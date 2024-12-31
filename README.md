@@ -12,17 +12,17 @@
 - 🖥️ Ollama (if you want to use local models)
 - 🤖 API Key for OpenAI (OpenAI compatible models) or Google Gemini (if you want to use OpenAI or Google Gemini)
 
-## The easiest way to get started is by exploring the [examples](examples) folder for additional sample use cases.
+## The easiest way to get started is by exploring the [examples](https://github.com/simplifyX-ai/extractflow-parser/tree/main/examples) folder for additional sample use cases.
 
-[Azure LLama Vision](examples/azure_llama_vision_openai_compatible_demo.ipynb)
+[Azure LLama Vision](https://github.com/simplifyX-ai/extractflow-parser/blob/main/examples/azure_llama_vision_openai_compatible_demo.ipynb)
 
-[QWEN2-VL](examples/qwen2-vl_openai_compatible_demo.ipynb)
+[QWEN2-VL](https://github.com/simplifyX-ai/extractflow-parser/blob/main/examples/qwen2-vl_openai_compatible_demo.ipynb)
 
-[OpenAI](examples/openai_demo.ipynb)
+[OpenAI](https://github.com/simplifyX-ai/extractflow-parser/blob/main/examples/openai_demo.ipynb)
 
-[Gemini](examples/gemini_demo.ipynb)
+[Gemini](https://github.com/simplifyX-ai/extractflow-parser/blob/main/examples/gemini_demo.ipynb)
 
-[Ollama](examples/ollama_demo.ipynb)
+[Ollama](https://github.com/simplifyX-ai/extractflow-parser/blob/main/examples/ollama_demo.ipynb)
 
 ## Models Support
 
