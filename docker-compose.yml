@@ -1,0 +1,32 @@
+name: extractflow_parser
+
+services:
+  extractflow_parser:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - MODEL_NAME=${MODEL_NAME:?MODEL_NAME is required}
+    environment:
+      - MODEL_NAME=${MODEL_NAME:?MODEL_NAME is required}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}  # Optional: For OpenAI models
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}  # Optional: For Gemini models
+    volumes:
+      - .:/app
+    working_dir: /app
+    tty: true
+    stdin_open: true
+    ports:
+      - "11434:11434"  # Expose Ollama port
+    deploy:
+      resources:
+        limits:
+          memory: 16G  # Set memory limit to 16GB
+        reservations:
+          memory: 8G   # Guarantee at least 8GB
+          # Uncomment below lines if you have NVIDIA GPU available
+          # devices:
+          #   - driver: nvidia
+          #     count: all
+          #     capabilities: [gpu]
+    command: tail -f /dev/null  # Keep container running 

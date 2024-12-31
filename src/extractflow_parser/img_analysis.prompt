@@ -1,0 +1,2 @@
+Analyze this image and return a detailed JSON description including any text detected, images detected, tables detected, extracted text and confidence score for the extracted text.
+Confidence score for the extracted text should be a float value between 0 and 1. If you cannot determine certain details, leave those fields empty.
