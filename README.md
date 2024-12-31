@@ -65,7 +65,6 @@ pip install 'extractflow_parser[openai]'
 pip install 'extractflow_parser[gemini]'
 ```
 
-
 ### Setting up Ollama (Optional)
 See [examples/ollama_setup.md](examples/ollama_setup.md) on how to setup Ollama locally.
 
