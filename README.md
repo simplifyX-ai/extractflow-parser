@@ -52,6 +52,15 @@ pip install 'extractflow_parser[openai]'
 pip install 'extractflow_parser[gemini]'
 ```
 
+### The easiest way to get started is by exploring the [examples](examples) folder for additional sample use cases.
+
+[Azure LLama Vision](examples/azure_llama_vision_openai_compatible_demo.ipynb)
+[QWEN2-VL](examples/azure_qwen2-vl_openai_compatible_demo.ipynb)
+[OpenAI](examples/openai_demo.ipynb)
+[Gemini](examples/gemini_demo.ipynb)
+[Ollama](examples/ollama_demo.ipynb)
+
+
 ### Setting up Ollama (Optional)
 See [examples/ollama_setup.md](examples/ollama_setup.md) on how to setup Ollama locally.
 
