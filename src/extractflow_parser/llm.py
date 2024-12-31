@@ -108,7 +108,7 @@ class LLM:
                     base_client = openai.OpenAI(**client_args)
                     self.client = {
                         "structured": from_openai(base_client, mode=Mode.MD_JSON),
-                        "unstructured": base_client
+                        "unstructured": base_client,
                     }
                 else:
                     self.client = openai.OpenAI(api_key=api_key)
@@ -274,7 +274,11 @@ class LLM:
                     )
                     return response.choices[0].message.content
             else:
-                client = self.client["unstructured"] if self.base_url and self.openai_compatible else self.client
+                client = (
+                    self.client["unstructured"]
+                    if self.base_url and self.openai_compatible
+                    else self.client
+                )
                 response = client.chat.completions.create(
                     model=self.model_name,
                     messages=messages,

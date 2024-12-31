@@ -116,7 +116,6 @@ from extractflow_parser import ExtractFlowParser
 
 # Initialize parser with OpenAI model
 parser = ExtractFlowParser(
-    base_url="https://api.openai.com/v1",  # Optional: Custom OpenAI API endpoint
     model_name="gpt-4o",
     api_key="your-openai-api-key", # Get the OpenAI API key from https://platform.openai.com/api-keys
     temperature=0.7,
