@@ -12,6 +12,18 @@
 - 🖥️ Ollama (if you want to use local models)
 - 🤖 API Key for OpenAI (OpenAI compatible models) or Google Gemini (if you want to use OpenAI or Google Gemini)
 
+## The easiest way to get started is by exploring the [examples](examples) folder for additional sample use cases.
+
+[Azure LLama Vision](examples/azure_llama_vision_openai_compatible_demo.ipynb)
+
+[QWEN2-VL](examples/qwen2-vl_openai_compatible_demo.ipynb)
+
+[OpenAI](examples/openai_demo.ipynb)
+
+[Gemini](examples/gemini_demo.ipynb)
+
+[Ollama](examples/ollama_demo.ipynb)
+
 ## Models Support
 
 ExtractFlow supports various vision language models from different providers:
@@ -52,14 +64,6 @@ pip install 'extractflow_parser[openai]'
 ```bash
 pip install 'extractflow_parser[gemini]'
 ```
-
-### The easiest way to get started is by exploring the [examples](examples) folder for additional sample use cases.
-
-[Azure LLama Vision](examples/azure_llama_vision_openai_compatible_demo.ipynb)
-[QWEN2-VL](examples/qwen2-vl_openai_compatible_demo.ipynb)
-[OpenAI](examples/openai_demo.ipynb)
-[Gemini](examples/gemini_demo.ipynb)
-[Ollama](examples/ollama_demo.ipynb)
 
 
 ### Setting up Ollama (Optional)
