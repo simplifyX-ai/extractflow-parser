@@ -2,7 +2,7 @@ from typing import Literal, Dict, Any, Union
 from pydantic import BaseModel
 from jinja2 import Template
 import re
-import instructor
+from instructor import from_openai, Mode
 from tenacity import retry, stop_after_attempt, wait_exponential
 
 SUPPORTED_MODELS: Dict[str, str] = {
@@ -103,9 +103,11 @@ class LLM:
                 )
             try:
                 client_args = {"api_key": api_key}
-                if self.base_url:
+                if self.base_url and self.openai_compatible:
                     client_args["base_url"] = self.base_url
-                self.client = instructor.from_openai(openai.OpenAI(**client_args))
+                    self.client = from_openai(openai.OpenAI(**client_args))
+                else:
+                    self.client = openai.OpenAI(api_key=api_key)
             except openai.OpenAIError as e:
                 raise LLMError(f"Unable to initialize OpenAI client: {str(e)}")
 
@@ -242,32 +244,42 @@ class LLM:
                 }
             ]
 
-            # Common parameters for all requests
-            request_params = {
-                "model": self.model_name,
-                "messages": messages,
-                "temperature": self.temperature,
-                "top_p": self.top_p,
-            }
-
-            # Handle different request scenarios
             if structured:
-                request_params.update({"response_model": ImageDescription})
+                if self.base_url and self.openai_compatible:
+                    return self.client.chat.completions.create(
+                        model=self.model_name,
+                        response_model=ImageDescription,
+                        messages=messages,
+                        temperature=0.0,
+                        top_p=0.4,
+                        mode=Mode.MD_JSON,
+                        **self.kwargs,
+                    )
+                else:
+                    response = self.client.beta.chat.completions.parse(
+                        model=self.model_name,
+                        response_format=ImageDescription,
+                        messages=messages,
+                        temperature=0.0,
+                        top_p=0.4,
+                        **self.kwargs,
+                    )
+                    return response.choices[0].message.content
+            else:
+                response = self.client.chat.completions.create(
+                    model=self.model_name,
+                messages=messages,
+                temperature=self.temperature,
+                top_p=self.top_p,
+                **self.kwargs,
+            )
 
-            response = self.client.chat.completions.create(**request_params)
-            content = response.choices[0].message.content
-
-            # Only apply markdown cleanup for non-structured responses
-            if not structured:
-                content = re.sub(
-                    r"```(?:markdown)?\n(.*?)\n```",
-                    r"\1",
-                    content,
-                    flags=re.DOTALL,
-                )
-
-            return content
-
+            return re.sub(
+                r"```(?:markdown)?\n(.*?)\n```",
+                r"\1",
+                response.choices[0].message.content,
+                flags=re.DOTALL,
+            )
         except Exception as e:
             raise LLMError(f"OpenAI Model processing failed: {str(e)}")
 
